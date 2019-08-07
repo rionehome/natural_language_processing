@@ -1,0 +1,29 @@
+{
+    "Are you ready to order?": [
+        "yes_no_sphinx", 
+        {
+            "yes": ["get_order", ""],
+            "no": ["", ""]
+        }
+    ],
+
+    "What is your order?": [
+        "rest_menu_sphinx", {
+            "^i want":
+            {
+                "yes": ["finish_get_order", "recognition_result"],
+                "no": ["", ""]
+            }
+        }
+    ],
+
+    "Did you take items?": [
+        "yes_no_sphinx",
+        {
+            "yes": ["finish_delivery",""],
+            "no": ["",""]
+        }
+
+    ]
+
+  }

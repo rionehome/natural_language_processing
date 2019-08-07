@@ -24,7 +24,7 @@ class Nlp:
         self.previous_speak_text = ""
         self.previous_dic_name = ""
 
-        self.before_text = ""  # 発話内容を関数の引数にするための変数
+        self.before_text = ""  # 音声認識結果を関数の引数にするための変数
 
         self.function_argument_pub = rospy.Publisher("/natural_language_processing/function_argument", String,
                                                      queue_size=10)
@@ -36,7 +36,7 @@ class Nlp:
     def speak_sentence_callback(self, data):
         # type: (str) -> None
         """
-        発話内容を受け取る
+        競技のパッケージから発話内容を受け取る
         :param data:発話内容
         :return: なし
         """
@@ -63,28 +63,34 @@ class Nlp:
             # textが"yes"なら関数呼び出し
             if text == "yes":  # --- ここ
                 function_argument_list = self.recog_dic[text]
-                print function_argument_list  # 関数名,引数
-                print self.before_text  # 引数
-                self.function_argument_pub.publish(function_argument_list[0])
+                function = function_argument_list[0]
+                # 音声認識結果を引数にするとき
+                if function_argument_list[1] == "recognition_result":
+                    function = function + "," + self.before_text  # 引数
+                print function
+                self.function_argument_pub.publish(function)
+
             # textが"no"なら再び音声認識を開始
             elif text == "no":  # --- ここ
                 self.speak("OK. Please say command again.")
                 self.decide_variable()
                 self.start_recognition(self.dic_name)
+
             # textがyes/no以外ならyes/no判定へ
             else:
                 match_flag = False
-                for sentence in self.recog_dic.keys():
-                    #  textと正規表現がマッチするとき
-                    if re.match(text, sentence) is not None:
+                for sentence in self.recog_dic:
+                    #  正規表現とtextがマッチするとき
+                    if re.search(sentence, text) is not None:
                         match_flag = True
                         self.recog_dic = self.recog_dic[sentence]
                         self.speak("You said {}. Am I correct? Please answer yes or no.".format(text))
                         self.start_recognition("yes_no_sphinx")
                         break
+                # 誤認識のためもう一度音声認識開始
                 if not match_flag:
-                    self.start_recognition(self.dic_name)  # --- ここ
-        self.before_text = text
+                    self.start_recognition(self.dic_name)
+            self.before_text = text
 
 
     def decide_variable(self):
