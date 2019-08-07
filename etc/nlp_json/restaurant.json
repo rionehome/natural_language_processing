@@ -9,7 +9,7 @@
 
     "What is your order?": [
         "rest_menu_sphinx", {
-            "^i want":
+            "^i want .*":
             {
                 "yes": ["finish_get_order", "recognition_result"],
                 "no": ["", ""]

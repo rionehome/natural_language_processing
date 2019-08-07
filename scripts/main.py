@@ -14,13 +14,13 @@ class Nlp:
         rospy.init_node("nlp_main")
 
         # json操作用変数定義
-        self.nlp_dic = self.make_nlp_dic(rospy.get_param("json_name"))  # --- ここ
+        self.nlp_dic = self.make_nlp_dic(rospy.get_param("json_name"))
         self.recog_dic = {}
         self.command_list = []
         self.speak_text = ""
         self.dic_name = ""
 
-        # 現在の発話内容と辞書名を格納するための変数 --- ここ
+        # 現在の発話内容と辞書名を格納するための変数
         self.previous_speak_text = ""
         self.previous_dic_name = ""
 
@@ -34,7 +34,7 @@ class Nlp:
 
 
     def speak_sentence_callback(self, data):
-        # type: (str) -> None
+        # type: (String) -> None
         """
         競技のパッケージから発話内容を受け取る
         :param data:発話内容
@@ -61,7 +61,7 @@ class Nlp:
             self.start_recognition(self.previous_dic_name)
         else:
             # textが"yes"なら関数呼び出し
-            if text == "yes":  # --- ここ
+            if text == "yes":
                 function_argument_list = self.recog_dic[text]
                 function = function_argument_list[0]
                 # 音声認識結果を引数にするとき
@@ -71,7 +71,7 @@ class Nlp:
                 self.function_argument_pub.publish(function)
 
             # textが"no"なら再び音声認識を開始
-            elif text == "no":  # --- ここ
+            elif text == "no":
                 self.speak("OK. Please say command again.")
                 self.decide_variable()
                 self.start_recognition(self.dic_name)
@@ -101,7 +101,7 @@ class Nlp:
         """
         self.command_list = self.nlp_dic[self.speak_text]
         self.dic_name = self.command_list[0]  # 音声認識の辞書名
-        self.recog_dic = self.command_list[1]  # キーが音声認識結果、値が辞書型変数か関数名と引数
+        self.recog_dic = self.command_list[1]  # キーは音声認識結果、値は辞書型変数か関数名と引数
 
 
     def start_recognition(self, param):
