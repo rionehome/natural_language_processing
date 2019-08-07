@@ -24,7 +24,7 @@ class Nlp:
         self.previous_speak_text = ""
         self.previous_dic_name = ""
 
-        self.before_text = ""  # 音声認識結果を関数の引数にするための変数
+        self.argument = ""  # 関数の引数のための変数
 
         self.function_argument_pub = rospy.Publisher("/natural_language_processing/function_argument", String,
                                                      queue_size=10)
@@ -62,17 +62,16 @@ class Nlp:
         else:
             # textが"yes"なら関数呼び出し
             if text == "yes":
-                function_argument_list = self.recog_dic[text]
-                function = function_argument_list[0]
+                function = self.recog_dic[text]
                 # 音声認識結果を引数にするとき
-                if function_argument_list[1] == "recognition_result":
-                    function = function + "," + self.before_text  # 引数
+                function = function + "," + self.argument  # 引数
                 print function
                 self.function_argument_pub.publish(function)
+                self.argument = ""  # 引数を初期化
 
             # textが"no"なら再び音声認識を開始
             elif text == "no":
-                self.speak("OK. Please say command again.")
+                self.speak("OK.")
                 self.decide_variable()
                 self.start_recognition(self.dic_name)
 
@@ -82,6 +81,7 @@ class Nlp:
                 for sentence in self.recog_dic:
                     #  正規表現とtextがマッチするとき
                     if re.search(sentence, text) is not None:
+                        self.argument = re.sub(sentence, "", text)
                         match_flag = True
                         self.recog_dic = self.recog_dic[sentence]
                         self.speak("You said {}. Am I correct? Please answer yes or no.".format(text))
@@ -90,7 +90,6 @@ class Nlp:
                 # 誤認識のためもう一度音声認識開始
                 if not match_flag:
                     self.start_recognition(self.dic_name)
-            self.before_text = text
 
 
     def decide_variable(self):
