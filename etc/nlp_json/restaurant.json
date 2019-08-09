@@ -3,7 +3,7 @@
         "yes_no_sphinx", 
         {
             "yes": "get_order",
-            "no": ""
+            "no": "restart_call_ducker"
         }
     ],
 
@@ -12,7 +12,7 @@
             "^i want ":
             {
                 "yes": "finish_get_order",
-                "no": ""
+                "no": "restart_get_order"
             }
         }
     ],
@@ -21,7 +21,7 @@
         "yes_no_sphinx",
         {
             "yes": "finish_delivery",
-            "no": ""
+            "no": "restart_here_you_are"
         }
 
     ]

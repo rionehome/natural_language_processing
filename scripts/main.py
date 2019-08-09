@@ -60,20 +60,19 @@ class Nlp:
             self.speak(self.previous_speak_text)
             self.start_recognition(self.previous_dic_name)
         else:
-            # textが"yes"なら関数呼び出し
-            if text == "yes":
-                function = self.recog_dic[text]
-                # 音声認識結果を引数にするとき
-                function = function + "," + self.argument  # 引数
-                print function
-                self.function_argument_pub.publish(function)
-                self.argument = ""  # 引数を初期化
-
-            # textが"no"なら再び音声認識を開始
-            elif text == "no":
-                self.speak("OK.")
-                self.decide_variable()
-                self.start_recognition(self.dic_name)
+            # textがyes/noなら関数呼び出し
+            if text == "yes" or text == "no":
+                if self.recog_dic[text] != "":
+                    function = self.recog_dic[text]
+                    function = function + "," + self.argument  # 引数
+                    print function
+                    self.function_argument_pub.publish(function)
+                    self.argument = ""  # 引数を初期化
+                # 関数がなければ再び音声認識を開始
+                else:
+                    self.speak("OK.")
+                    self.decide_variable()
+                    self.start_recognition(self.dic_name)
 
             # textがyes/no以外ならyes/no判定へ
             else:
@@ -124,6 +123,7 @@ class Nlp:
         :param text: 発話内容
         :return: なし
         """
+        rospy.wait_for_service("/sound_system/speak")
         rospy.ServiceProxy("/sound_system/speak", StringService)(text)
         self.previous_speak_text = text
 
