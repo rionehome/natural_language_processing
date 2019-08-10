@@ -1,5 +1,5 @@
 {
-  "Please say follow me": [
+  "Please say follow me.": [
       "follow_me_sphinx", {
        "follow me":
           {
@@ -9,7 +9,7 @@
       }
   ],
   
-  "When you arrive target point, please say stop following me": [
+  "When you arrive target point, please say stop following me.": [
       "follow_me_sphinx", {
         "stop following me":
         {
@@ -24,17 +24,20 @@
       }
   ],
 
-  "May I help you": [
+  "May I help you?": [
       "take_sphinx", {
         "^take this bag to the ":
           {
-            "yes": "send_place_msg",
+            "yes": "ask_put_bag",
             "no": ""
           }
       }
   ],
-  
-  "I will guide you to the car. Please follow me":
-      "back_to_the_car"
-  
+
+  "Did you put your bag?": [
+      "yes_no_sphinx", {
+	"yes": "send_place_msg",
+	"no": "restart_ask_put_bag"
+      }
+  ]
 }
