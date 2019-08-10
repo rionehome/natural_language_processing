@@ -24,7 +24,8 @@ class Nlp:
         self.previous_speak_text = ""
         self.previous_dic_name = ""
 
-        self.argument = ""  # 関数の引数のための変数
+        # 関数の引数
+        self.argument = ""
 
         self.function_argument_pub = rospy.Publisher("/natural_language_processing/function_argument", String,
                                                      queue_size=10)
@@ -65,7 +66,7 @@ class Nlp:
                 if self.recog_dic[text] != "":
                     function = self.recog_dic[text]
                     function = function + "," + self.argument  # 引数
-                    print function
+                    print "関数名,引数： {}".format(function)
                     self.function_argument_pub.publish(function)
                     self.argument = ""  # 引数を初期化
                 # 関数がなければ再び音声認識を開始
@@ -99,7 +100,7 @@ class Nlp:
         """
         self.command_list = self.nlp_dic[self.speak_text]
         self.dic_name = self.command_list[0]  # 音声認識の辞書名
-        self.recog_dic = self.command_list[1]  # キーは音声認識結果、値は辞書型変数か関数名と引数
+        self.recog_dic = self.command_list[1]  # キーは音声認識結果、値は辞書型変数か関数名
 
 
     def start_recognition(self, param):
