@@ -7,6 +7,7 @@ from sound_system.srv import *
 import json
 import os
 import re
+import time
 
 
 class Nlp:
@@ -26,9 +27,6 @@ class Nlp:
 
         # 関数の引数
         self.argument = ""
-
-        self.function_argument_pub = rospy.Publisher("/natural_language_processing/function_argument", String,
-                                                     queue_size=10)
 
         rospy.Subscriber("/natural_language_processing/speak_sentence", String, self.speak_sentence_callback)
         rospy.Subscriber("/sound_system/result", String, self.speech_recognition_callback)
@@ -65,9 +63,10 @@ class Nlp:
             if text == "yes" or text == "no":
                 if self.recog_dic[text] != "":
                     function = self.recog_dic[text]
-                    function = function + "," + self.argument  # 引数
-                    print "関数名,引数： {}".format(function)
-                    self.function_argument_pub.publish(function)
+                    function_argument_pub = rospy.Publisher("/natural_language_processing/{}".format(function),
+                                                            String, queue_size=10)
+                    time.sleep(1)
+                    function_argument_pub.publish(self.argument)
                     self.argument = ""  # 引数を初期化
                 # 関数がなければ再び音声認識を開始
                 else:
@@ -111,6 +110,7 @@ class Nlp:
         :param param: sphinxの辞書名
         :return: なし
         """
+        rospy.wait_for_service("/sound_system/recognition")
         rospy.ServiceProxy("/sound_system/recognition", StringService)(param)
         self.previous_dic_name = param
 
