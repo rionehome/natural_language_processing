@@ -1,0 +1,4 @@
+<launch>
+  <node name="nlp_main" pkg="natural_language_processing" type="main.py" output="screen" />
+  <param name="json_name" value="restaurant.json"/>
+</launch>

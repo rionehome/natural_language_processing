@@ -1,0 +1,54 @@
+{
+  "Please say follow me.": [
+    "follow_me_sphinx",
+    {
+      "follow me": {
+        "yes": "follow_me",
+        "no": ""
+      }
+    }
+  ],
+  "When you arrive target point, please say stop following me.": [
+    "follow_me_sphinx",
+    {
+      "stop following me": {
+        "yes": "stop_follow_me",
+        "no": ""
+      },
+      "here is the car": {
+        "yes": "stop_follow_me",
+        "no": ""
+      }
+    }
+  ],
+  "May I help you?": [
+    "take_sphinx",
+    {
+      "^take this bag to the ": {
+        "yes": "ask_put_bag",
+        "no": "restart_ask_place"
+      }
+    }
+  ],
+  "I will say all places.": [
+    "yes_no_sphinx",
+    {
+      "yes": "ask_all_places",
+      "no": ""
+    }
+  ],
+  "Is it ": [
+    "yes_no_sphinx",
+    {
+      "yes": "ask_put_bag",
+      "no": "ask_all_places"
+    }
+  ],
+  "Did you put your bag?": [
+    "yes_no_sphinx",
+    {
+      "yes": "send_place_msg",
+      "no": "restart_ask_put_bag"
+    }
+  ]
+}
