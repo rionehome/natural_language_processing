@@ -1,0 +1,27 @@
+{
+  "Please say follow me": [
+      "follow_me_sphinx", {
+       "follow me":
+          {
+            "yes": ["follow_me", ""],
+            "no": ["", ""]
+          }
+      }
+  ],
+  
+  "When you arrive target point, please say stop following me": [
+      "follow_me_sphinx", {
+        "stop following me":
+        {
+          "yes": ["stop_follow_me", ""],
+          "no": ["", ""]
+        },
+        "here is the car":
+        {
+          "yes": ["stop_follow_me", ""],
+          "no": ["", ""]
+        }
+      }
+  ]
+        
+}
